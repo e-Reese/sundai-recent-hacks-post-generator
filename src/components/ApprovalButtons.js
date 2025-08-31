@@ -2,32 +2,32 @@ export default function ApprovalButtons({ onApprove, onReject, isLoading }) {
   return (
     <div style={{
       display: 'flex',
-      gap: '20px',
+      gap: '15px',
       justifyContent: 'center',
-      margin: '40px 0',
+      margin: '20px 0',
       fontFamily: '"Inter", "Segoe UI", Roboto, sans-serif'
     }}>
       <button
         onClick={onApprove}
         disabled={isLoading}
         style={{
-          padding: '16px 32px',
+          padding: '12px 24px',
           background: isLoading 
             ? 'linear-gradient(45deg, #6b7280, #4b5563)' 
             : 'linear-gradient(45deg, #22c55e, #16a34a)',
           color: 'white',
           border: 'none',
-          borderRadius: '12px',
-          fontSize: '16px',
+          borderRadius: '10px',
+          fontSize: '14px',
           fontWeight: '600',
           cursor: isLoading ? 'not-allowed' : 'pointer',
           opacity: isLoading ? 0.7 : 1,
           display: 'flex',
           alignItems: 'center',
-          gap: '10px',
+          gap: '8px',
           boxShadow: isLoading 
-            ? '0 4px 12px rgba(107, 114, 128, 0.3)'
-            : '0 8px 24px rgba(34, 197, 94, 0.4)',
+            ? '0 3px 8px rgba(107, 114, 128, 0.3)'
+            : '0 6px 18px rgba(34, 197, 94, 0.4)',
           transition: 'all 0.3s ease',
           fontFamily: 'inherit'
         }}
@@ -55,20 +55,20 @@ export default function ApprovalButtons({ onApprove, onReject, isLoading }) {
         onClick={onReject}
         disabled={isLoading}
         style={{
-          padding: '16px 32px',
+          padding: '12px 24px',
           background: isLoading 
             ? 'linear-gradient(45deg, #6b7280, #4b5563)' 
             : 'linear-gradient(45deg, #ef4444, #dc2626)',
           color: 'white',
           border: 'none',
-          borderRadius: '12px',
-          fontSize: '16px',
+          borderRadius: '10px',
+          fontSize: '14px',
           fontWeight: '600',
           cursor: isLoading ? 'not-allowed' : 'pointer',
           opacity: isLoading ? 0.7 : 1,
           boxShadow: isLoading 
-            ? '0 4px 12px rgba(107, 114, 128, 0.3)'
-            : '0 8px 24px rgba(239, 68, 68, 0.4)',
+            ? '0 3px 8px rgba(107, 114, 128, 0.3)'
+            : '0 6px 18px rgba(239, 68, 68, 0.4)',
           transition: 'all 0.3s ease',
           fontFamily: 'inherit'
         }}

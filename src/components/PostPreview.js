@@ -18,22 +18,22 @@ export default function PostPreview({ text, status, onEdit, canEdit }) {
   return (
     <div style={{
       border: 'none',
-      borderRadius: '20px',
-      padding: '30px',
-      margin: '30px 0',
+      borderRadius: '16px',
+      padding: '20px',
+      margin: '15px 0',
       backgroundColor: 'rgba(255, 255, 255, 0.95)',
       backdropFilter: 'blur(20px)',
-      boxShadow: '0 20px 60px rgba(0, 0, 0, 0.1)',
+      boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
       fontFamily: '"Inter", "Segoe UI", Roboto, sans-serif'
     }}>
       <div style={{
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: '25px'
+        marginBottom: '15px'
       }}>
         <h3 style={{
-          fontSize: '1.5rem',
+          fontSize: '1.2rem',
           fontWeight: '700',
           color: '#1f2937',
           margin: '0'
@@ -76,20 +76,20 @@ export default function PostPreview({ text, status, onEdit, canEdit }) {
       
       <div style={{
         backgroundColor: 'white',
-        padding: '25px',
-        borderRadius: '16px',
+        padding: '18px',
+        borderRadius: '12px',
         border: 'none',
-        minHeight: '120px',
-        boxShadow: '0 8px 24px rgba(0, 0, 0, 0.06)'
+        minHeight: '100px',
+        boxShadow: '0 6px 18px rgba(0, 0, 0, 0.06)'
       }}>
         <div style={{
           display: 'flex',
           alignItems: 'center',
-          marginBottom: '10px'
+          marginBottom: '12px'
         }}>
           <div style={{
-            width: '48px',
-            height: '48px',
+            width: '40px',
+            height: '40px',
             borderRadius: '50%',
             background: 'linear-gradient(135deg, #0077b5, #005885)',
             display: 'flex',
@@ -97,21 +97,22 @@ export default function PostPreview({ text, status, onEdit, canEdit }) {
             justifyContent: 'center',
             color: 'white',
             fontWeight: '700',
-            marginRight: '15px',
-            boxShadow: '0 4px 12px rgba(0, 119, 181, 0.3)'
+            marginRight: '12px',
+            boxShadow: '0 3px 8px rgba(0, 119, 181, 0.3)',
+            fontSize: '14px'
           }}>
             YC
           </div>
           <div>
             <div style={{ 
               fontWeight: '600', 
-              fontSize: '16px',
+              fontSize: '14px',
               color: '#1f2937'
             }}>
               Your Company
             </div>
             <div style={{ 
-              fontSize: '14px', 
+              fontSize: '12px', 
               color: '#6b7280',
               fontWeight: '400'
             }}>
@@ -121,8 +122,8 @@ export default function PostPreview({ text, status, onEdit, canEdit }) {
         </div>
         
         <div style={{
-          lineHeight: '1.6',
-          fontSize: '15px',
+          lineHeight: '1.5',
+          fontSize: '14px',
           whiteSpace: 'pre-wrap',
           color: '#374151',
           fontWeight: '400'

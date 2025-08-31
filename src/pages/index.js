@@ -127,31 +127,32 @@ export default function Home() {
     <div style={{ 
       minHeight: '100vh',
       background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      fontFamily: '"Inter", "Segoe UI", Roboto, -apple-system, BlinkMacSystemFont, sans-serif'
+      fontFamily: '"Inter", "Segoe UI", Roboto, -apple-system, BlinkMacSystemFont, sans-serif',
+      padding: '15px 20px',
+      overflow: 'auto'
     }}>
       <div style={{ 
         maxWidth: '900px', 
         margin: '0 auto', 
-        padding: '40px 20px',
         color: 'white'
       }}>
         <h1 style={{
-          fontSize: '3rem',
+          fontSize: '2.2rem',
           fontWeight: '700',
           textAlign: 'center',
-          marginBottom: '10px',
+          marginBottom: '5px',
           background: 'linear-gradient(45deg, #fff, #e0e7ff)',
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
           backgroundClip: 'text'
         }}>
-          Sundai Hacks Weekly Summary Post Generator
+          Sundai Recent Hacks Post Generator
         </h1>
         <p style={{
           textAlign: 'center',
-          fontSize: '1.2rem',
+          fontSize: '1rem',
           opacity: '0.9',
-          marginBottom: '40px',
+          marginBottom: '20px',
           fontWeight: '300'
         }}>
           Review, approve, and publish your LinkedIn content
@@ -160,17 +161,17 @@ export default function Home() {
         {/* Date Filter and Generate Section */}
         <div style={{
           backgroundColor: 'rgba(255, 255, 255, 0.95)',
-          borderRadius: '20px',
-          padding: '30px',
-          margin: '30px 0',
+          borderRadius: '16px',
+          padding: '20px',
+          margin: '15px 0',
           backdropFilter: 'blur(20px)',
-          boxShadow: '0 20px 60px rgba(0, 0, 0, 0.1)'
+          boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)'
         }}>
           <h3 style={{
-            fontSize: '1.5rem',
+            fontSize: '1.2rem',
             fontWeight: '700',
             color: '#1f2937',
-            marginBottom: '20px',
+            marginBottom: '15px',
             textAlign: 'center'
           }}>
             🎯 Generate Post from Sundai Hack Projects
@@ -218,7 +219,7 @@ export default function Home() {
               onClick={handleGeneratePost}
               disabled={isGenerating}
               style={{
-                padding: '14px 28px',
+                padding: '12px 24px',
                 background: isGenerating 
                   ? 'linear-gradient(45deg, #6b7280, #4b5563)' 
                   : 'linear-gradient(45deg, #10b981, #059669)',
@@ -226,18 +227,18 @@ export default function Home() {
                 border: 'none',
                 borderRadius: '12px',
                 cursor: isGenerating ? 'not-allowed' : 'pointer',
-                fontSize: '16px',
+                fontSize: '14px',
                 fontWeight: '600',
                 opacity: isGenerating ? 0.7 : 1,
                 display: 'flex',
                 alignItems: 'center',
-                gap: '10px',
+                gap: '8px',
                 boxShadow: isGenerating 
                   ? '0 4px 12px rgba(107, 114, 128, 0.3)'
-                  : '0 8px 24px rgba(16, 185, 129, 0.4)',
+                  : '0 6px 18px rgba(16, 185, 129, 0.4)',
                 transition: 'all 0.3s ease',
                 fontFamily: 'inherit',
-                marginTop: '20px'
+                marginTop: '15px'
               }}
             >
               {isGenerating ? (
@@ -261,9 +262,9 @@ export default function Home() {
           </div>
           
           <div style={{
-            marginTop: '15px',
+            marginTop: '10px',
             textAlign: 'center',
-            fontSize: '13px',
+            fontSize: '12px',
             color: '#6b7280'
           }}>
             Generate a LinkedIn post based on Sundai Hack projects from the selected date
@@ -273,19 +274,19 @@ export default function Home() {
       {isEditing ? (
         <div style={{
           border: 'none',
-          borderRadius: '20px',
-          padding: '30px',
-          margin: '30px 0',
+          borderRadius: '16px',
+          padding: '20px',
+          margin: '15px 0',
           backgroundColor: 'rgba(255, 255, 255, 0.95)',
           backdropFilter: 'blur(20px)',
-          boxShadow: '0 20px 60px rgba(0, 0, 0, 0.1)',
+          boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
           fontFamily: '"Inter", "Segoe UI", Roboto, sans-serif'
         }}>
           <h3 style={{
-            fontSize: '1.5rem',
+            fontSize: '1.2rem',
             fontWeight: '700',
             color: '#1f2937',
-            marginBottom: '20px'
+            marginBottom: '15px'
           }}>
             ✏️ Edit Post
           </h3>
@@ -295,13 +296,13 @@ export default function Home() {
             placeholder="Write your LinkedIn post..."
             style={{
               width: '100%',
-              minHeight: '150px',
-              padding: '20px',
+              minHeight: '120px',
+              padding: '15px',
               border: '2px solid #e5e7eb',
               borderRadius: '12px',
-              fontSize: '15px',
+              fontSize: '14px',
               fontFamily: 'inherit',
-              lineHeight: '1.6',
+              lineHeight: '1.5',
               resize: 'vertical',
               outline: 'none',
               transition: 'border-color 0.3s ease',
@@ -369,19 +370,19 @@ export default function Home() {
       
       {result && (
         <div style={{
-          padding: '20px',
-          margin: '30px 0',
-          borderRadius: '16px',
+          padding: '15px',
+          margin: '15px 0',
+          borderRadius: '12px',
           backgroundColor: result.success ? 'rgba(34, 197, 94, 0.15)' : 'rgba(239, 68, 68, 0.15)',
           color: result.success ? '#22c55e' : '#ef4444',
           border: `2px solid ${result.success ? 'rgba(34, 197, 94, 0.3)' : 'rgba(239, 68, 68, 0.3)'}`,
           backdropFilter: 'blur(10px)',
-          fontSize: '1.1rem',
+          fontSize: '1rem',
           fontWeight: '500',
           textAlign: 'center',
-          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)'
+          boxShadow: '0 6px 24px rgba(0, 0, 0, 0.1)'
         }}>
-          <div style={{ marginBottom: linkedinPostUrl ? '15px' : '0' }}>
+          <div style={{ marginBottom: linkedinPostUrl ? '12px' : '0' }}>
             {result.success ? '🎉 ' : '⚠️ '}{result.message}
           </div>
           {linkedinPostUrl && result.success && (
@@ -422,29 +423,29 @@ export default function Home() {
       )}
       
       {postData.status !== 'pending' && (
-        <div style={{ textAlign: 'center', marginTop: '30px' }}>
+        <div style={{ textAlign: 'center', marginTop: '20px' }}>
         <button 
           onClick={resetPost}
           style={{
-              padding: '16px 32px',
+              padding: '12px 24px',
               background: 'linear-gradient(45deg, #3b82f6, #1d4ed8)',
               color: 'white',
               border: 'none',
-              borderRadius: '12px',
+              borderRadius: '10px',
               cursor: 'pointer',
-              fontSize: '1.1rem',
+              fontSize: '14px',
               fontWeight: '600',
-              boxShadow: '0 8px 24px rgba(59, 130, 246, 0.4)',
+              boxShadow: '0 6px 18px rgba(59, 130, 246, 0.4)',
               transition: 'all 0.3s ease',
               fontFamily: 'inherit'
             }}
             onMouseOver={(e) => {
-              e.target.style.transform = 'translateY(-2px)';
-              e.target.style.boxShadow = '0 12px 32px rgba(59, 130, 246, 0.5)';
+              e.target.style.transform = 'translateY(-1px)';
+              e.target.style.boxShadow = '0 8px 24px rgba(59, 130, 246, 0.5)';
             }}
             onMouseOut={(e) => {
               e.target.style.transform = 'translateY(0)';
-              e.target.style.boxShadow = '0 8px 24px rgba(59, 130, 246, 0.4)';
+              e.target.style.boxShadow = '0 6px 18px rgba(59, 130, 246, 0.4)';
             }}
           >
             ✨ Create New Post
@@ -455,17 +456,17 @@ export default function Home() {
       {/* Post History Section */}
       {postHistory.length > 0 && (
         <div style={{
-          marginTop: '50px',
-          padding: '30px',
+          marginTop: '25px',
+          padding: '20px',
           backgroundColor: 'rgba(255, 255, 255, 0.1)',
-          borderRadius: '20px',
+          borderRadius: '16px',
           backdropFilter: 'blur(10px)'
         }}>
           <h2 style={{
-            fontSize: '1.5rem',
+            fontSize: '1.2rem',
             fontWeight: '700',
             color: 'white',
-            marginBottom: '20px',
+            marginBottom: '15px',
             textAlign: 'center'
           }}>
             📊 Session History ({postHistory.length} posts)
@@ -474,8 +475,8 @@ export default function Home() {
           <div style={{
             display: 'flex',
             flexDirection: 'column',
-            gap: '15px',
-            maxHeight: '300px',
+            gap: '10px',
+            maxHeight: '200px',
             overflowY: 'auto'
           }}>
             {postHistory.map((post) => (
@@ -483,12 +484,12 @@ export default function Home() {
                 key={post.id}
                 style={{
                   backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                  padding: '15px 20px',
-                  borderRadius: '12px',
+                  padding: '12px 15px',
+                  borderRadius: '10px',
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
-                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
+                  boxShadow: '0 3px 8px rgba(0, 0, 0, 0.1)'
                 }}
               >
                 <div style={{ flex: 1 }}>
