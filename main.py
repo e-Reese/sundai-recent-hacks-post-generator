@@ -32,7 +32,16 @@ def main():
                         help='Generate a mock LinkedIn post without using the OpenAI API')
     parser.add_argument('--dry-run', action='store_true',
                         help='Generate the post but do not publish to LinkedIn')
+    parser.add_argument('--use-sqlite', action='store_true',
+                        help='Use SQLite database instead of PostgreSQL')
+    parser.add_argument('--sqlite-path', type=str, default='hackathon_projects.db',
+                        help='Path to SQLite database file (default: hackathon_projects.db)')
     args = parser.parse_args()
+    
+    # Set environment variables based on command line arguments
+    if args.use_sqlite:
+        os.environ["USE_SQLITE"] = "true"
+        os.environ["SQLITE_PATH"] = args.sqlite_path
     
     # Use provided date or default to today
     date_str = args.date or datetime.now().strftime("%Y-%m-%d")

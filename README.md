@@ -18,18 +18,12 @@ A tool for automatically generating and posting LinkedIn updates about recent pr
    ```
 3. Create a `.env` file with the following variables:
    ```
-   # PostgreSQL Database credentials (default)
+   # PostgreSQL Database credentials
    DB_HOST=your_db_host
    DB_NAME=your_db_name
    DB_USER=your_db_user
    DB_PASS=your_db_password
    DB_PORT=5432
-   
-   # OR Azure SQL Database credentials (will be used if all are present)
-   AZURE_SQL_SERVER=your-server-name.database.windows.net
-   AZURE_SQL_DB=your-database-name
-   AZURE_SQL_USER=your-username
-   AZURE_SQL_PASSWORD=your-password
    
    # OpenAI API
    OPENAI_API_KEY=your_openai_api_key
@@ -58,6 +52,8 @@ python main.py
 - `--max-projects N`: Maximum number of projects to include (default: 20)
 - `--mock`: Generate a mock post without using OpenAI API
 - `--dry-run`: Generate the post but don't publish to LinkedIn
+- `--use-sqlite`: Use SQLite database instead of PostgreSQL
+- `--sqlite-path PATH`: Path to SQLite database file (default: hackathon_projects.db)
 
 ### Examples
 
@@ -78,7 +74,7 @@ python main.py --dry-run
 
 ## Database Configuration
 
-This tool supports two database backends:
+This tool supports both PostgreSQL and SQLite as database backends.
 
 ### PostgreSQL (Default)
 
@@ -91,23 +87,34 @@ DB_PASS=your_db_password
 DB_PORT=5432
 ```
 
-### Azure SQL Database
+### SQLite (Local Development)
 
-To use Azure SQL instead of PostgreSQL, provide these environment variables:
+For local development or Next.js deployment, you can use SQLite instead of PostgreSQL.
+
+To use SQLite, run the application with the `--use-sqlite` flag:
 ```
-AZURE_SQL_SERVER=your-server-name.database.windows.net
-AZURE_SQL_DB=your-database-name
-AZURE_SQL_USER=your-username
-AZURE_SQL_PASSWORD=your-password
+python main.py --use-sqlite
 ```
 
-The application will automatically use Azure SQL if all Azure SQL environment variables are present.
+You can specify the path to the SQLite database file with the `--sqlite-path` flag:
+```
+python main.py --use-sqlite --sqlite-path=path/to/database.db
+```
 
-**Note:** Using Azure SQL requires the ODBC Driver 18 for SQL Server to be installed on your system. 
-Installation instructions:
-- Windows: [Microsoft Docs](https://docs.microsoft.com/en-us/sql/connect/odbc/download-odbc-driver-for-sql-server)
-- macOS: `brew install microsoft/mssql-release/msodbcsql18`
-- Linux: [Microsoft Docs](https://docs.microsoft.com/en-us/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server)
+Alternatively, you can set the following environment variables in your `.env` file:
+```
+USE_SQLITE=true
+SQLITE_PATH=path/to/database.db
+```
+
+### Creating a SQLite Test Database
+
+You can create a test SQLite database with sample data using the provided script:
+```
+python setup_test_db_sqlite.py --rows 10 --hackathon "Your Hackathon Name"
+```
+
+This will create a `hackathon_projects.db` file with sample project data.
 
 ## Components
 

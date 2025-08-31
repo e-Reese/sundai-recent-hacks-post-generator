@@ -2,7 +2,7 @@ import os
 import pandas as pd
 from typing import List, Dict, Any, Optional, Tuple, Union, Literal
 from dotenv import load_dotenv
-from sqlalchemy import create_engine, text, inspect, URL
+from sqlalchemy import create_engine, text, inspect
 from sqlalchemy.engine import Engine, Connection
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -11,7 +11,7 @@ load_dotenv()
 
 class DBConnector:
     """
-    A class for connecting to and interacting with databases (PostgreSQL or Azure SQL) using SQLAlchemy.
+    A class for connecting to and interacting with databases (PostgreSQL or SQLite) using SQLAlchemy.
     """
     
     def __init__(self, 
@@ -21,7 +21,8 @@ class DBConnector:
                  password: Optional[str] = None,
                  port: Optional[int] = None,
                  connection_string: Optional[str] = None,
-                 db_type: Literal['postgresql', 'azure_sql'] = 'postgresql'):
+                 db_type: Literal['postgresql', 'sqlite'] = 'postgresql',
+                 sqlite_path: Optional[str] = None):
         """
         Initialize the SQLAlchemy connector with connection parameters.
         If parameters are not provided, they will be loaded from environment variables.
@@ -33,23 +34,21 @@ class DBConnector:
             password: Database password
             port: Database port
             connection_string: Direct connection string (overrides other parameters if provided)
-            db_type: Type of database to connect to ('postgresql' or 'azure_sql')
+            db_type: Type of database to connect to ('postgresql' or 'sqlite')
+            sqlite_path: Path to SQLite database file (only used if db_type is 'sqlite')
         """
         self.db_type = db_type
         
-        # Use appropriate environment variables based on database type
         if self.db_type == 'postgresql':
             self.host = host or os.environ.get("DB_HOST")
             self.database = database or os.environ.get("DB_NAME")
             self.user = user or os.environ.get("DB_USER")
             self.password = password or os.environ.get("DB_PASSWORD")
             self.port = port or os.environ.get("DB_PORT", 5432)
-        elif self.db_type == 'azure_sql':
-            self.host = host or os.environ.get("AZURE_SQL_SERVER")
-            self.database = database or os.environ.get("AZURE_SQL_DB")
-            self.user = user or os.environ.get("AZURE_SQL_USER")
-            self.password = password or os.environ.get("AZURE_SQL_PASSWORD")
-            self.port = port or 1433  # Default port for SQL Server
+        elif self.db_type == 'sqlite':
+            self.sqlite_path = sqlite_path or os.environ.get("SQLITE_PATH", "hackathon_projects.db")
+        else:
+            raise ValueError(f"Unsupported database type: {self.db_type}")
         
         self.connection_string = connection_string
         
@@ -59,7 +58,7 @@ class DBConnector:
     
     def connect(self) -> bool:
         """
-        Establish a connection to the database (PostgreSQL or Azure SQL).
+        Establish a connection to the database (PostgreSQL or SQLite).
         
         Returns:
             bool: True if connection is successful, False otherwise
@@ -69,15 +68,8 @@ class DBConnector:
                 conn_str = self.connection_string
             elif self.db_type == 'postgresql':
                 conn_str = f"postgresql://{self.user}:{self.password}@{self.host}:{self.port}/{self.database}"
-            elif self.db_type == 'azure_sql':
-                # Format for Azure SQL using ODBC driver
-                conn_str = (
-                    f"mssql+pyodbc://{self.user}:{self.password}@{self.host}:1433/{self.database}"
-                    "?driver=ODBC+Driver+18+for+SQL+Server"
-                    "&encrypt=yes&trustservercertificate=no&connection_timeout=30"
-                )
-            else:
-                raise ValueError(f"Unsupported database type: {self.db_type}")
+            elif self.db_type == 'sqlite':
+                conn_str = f"sqlite:///{self.sqlite_path}"
             
             self.engine = create_engine(conn_str)
             self.connection = self.engine.connect()
