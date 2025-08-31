@@ -13,8 +13,8 @@ from openai import OpenAI
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Import after adding to path
-from utils import parse_date
-from data_pull import get_projects_by_date, format_projects_for_prompt, save_projects_to_csv
+from src.utils import parse_date
+from src.data_pull import get_projects_by_date, format_projects_for_prompt, save_projects_to_csv
 
 load_dotenv()
 

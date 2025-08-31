@@ -4,8 +4,6 @@ import os
 load_dotenv()
 
 
-
-
 # ---- Request token ----
 url = "https://www.linkedin.com/oauth/v2/accessToken"
 data = {

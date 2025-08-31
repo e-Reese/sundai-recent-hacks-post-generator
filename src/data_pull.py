@@ -9,8 +9,8 @@ from datetime import datetime, timedelta
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Import after adding to path
-from db_connector import DBConnector
-from utils import parse_date
+from src.db_connector import DBConnector
+from src.utils import parse_date
 
 load_dotenv()
 
