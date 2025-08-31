@@ -18,11 +18,18 @@ A tool for automatically generating and posting LinkedIn updates about recent pr
    ```
 3. Create a `.env` file with the following variables:
    ```
-   # Database credentials
+   # PostgreSQL Database credentials (default)
    DB_HOST=your_db_host
    DB_NAME=your_db_name
    DB_USER=your_db_user
    DB_PASS=your_db_password
+   DB_PORT=5432
+   
+   # OR Azure SQL Database credentials (will be used if all are present)
+   AZURE_SQL_SERVER=your-server-name.database.windows.net
+   AZURE_SQL_DB=your-database-name
+   AZURE_SQL_USER=your-username
+   AZURE_SQL_PASSWORD=your-password
    
    # OpenAI API
    OPENAI_API_KEY=your_openai_api_key
@@ -68,6 +75,39 @@ Generate a post but don't publish it:
 ```
 python main.py --dry-run
 ```
+
+## Database Configuration
+
+This tool supports two database backends:
+
+### PostgreSQL (Default)
+
+Provide the following environment variables in your `.env` file:
+```
+DB_HOST=your_db_host
+DB_NAME=your_db_name
+DB_USER=your_db_user
+DB_PASS=your_db_password
+DB_PORT=5432
+```
+
+### Azure SQL Database
+
+To use Azure SQL instead of PostgreSQL, provide these environment variables:
+```
+AZURE_SQL_SERVER=your-server-name.database.windows.net
+AZURE_SQL_DB=your-database-name
+AZURE_SQL_USER=your-username
+AZURE_SQL_PASSWORD=your-password
+```
+
+The application will automatically use Azure SQL if all Azure SQL environment variables are present.
+
+**Note:** Using Azure SQL requires the ODBC Driver 18 for SQL Server to be installed on your system. 
+Installation instructions:
+- Windows: [Microsoft Docs](https://docs.microsoft.com/en-us/sql/connect/odbc/download-odbc-driver-for-sql-server)
+- macOS: `brew install microsoft/mssql-release/msodbcsql18`
+- Linux: [Microsoft Docs](https://docs.microsoft.com/en-us/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server)
 
 ## Components
 
