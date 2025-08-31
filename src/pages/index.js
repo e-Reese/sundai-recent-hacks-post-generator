@@ -14,6 +14,8 @@ export default function Home() {
   const [editText, setEditText] = useState("");
   const [linkedinPostUrl, setLinkedinPostUrl] = useState(null);
   const [postHistory, setPostHistory] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const handleApprove = async () => {
     setIsPosting(true);
@@ -96,6 +98,31 @@ export default function Home() {
     setIsEditing(false);
   };
 
+  const handleGeneratePost = async () => {
+    setIsGenerating(true);
+    try {
+      const response = await fetch('/api/generate-post', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ date: selectedDate }),
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        setPostData({ text: data.generatedPost, status: 'pending' });
+        setResult({ success: true, message: 'Post generated successfully!' });
+      } else {
+        setResult({ success: false, message: data.error || 'Failed to generate post' });
+      }
+    } catch (error) {
+      setResult({ success: false, message: 'Failed to generate post' });
+    }
+    setIsGenerating(false);
+  };
+
   return (
     <div style={{ 
       minHeight: '100vh',
@@ -118,7 +145,7 @@ export default function Home() {
           WebkitTextFillColor: 'transparent',
           backgroundClip: 'text'
         }}>
-          LinkedIn Post Studio
+          Sundai Hacks Weekly Summary Post Generator
         </h1>
         <p style={{
           textAlign: 'center',
@@ -129,6 +156,119 @@ export default function Home() {
         }}>
           Review, approve, and publish your LinkedIn content
         </p>
+
+        {/* Date Filter and Generate Section */}
+        <div style={{
+          backgroundColor: 'rgba(255, 255, 255, 0.95)',
+          borderRadius: '20px',
+          padding: '30px',
+          margin: '30px 0',
+          backdropFilter: 'blur(20px)',
+          boxShadow: '0 20px 60px rgba(0, 0, 0, 0.1)'
+        }}>
+          <h3 style={{
+            fontSize: '1.5rem',
+            fontWeight: '700',
+            color: '#1f2937',
+            marginBottom: '20px',
+            textAlign: 'center'
+          }}>
+            🎯 Generate Post from Sundai Hack Projects
+          </h3>
+          
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '20px',
+            justifyContent: 'center',
+            flexWrap: 'wrap'
+          }}>
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '8px'
+            }}>
+              <label style={{
+                fontSize: '14px',
+                fontWeight: '600',
+                color: '#374151'
+              }}>
+                📅 Select Date:
+              </label>
+              <input
+                type="date"
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
+                style={{
+                  padding: '12px 16px',
+                  border: '2px solid #e5e7eb',
+                  borderRadius: '12px',
+                  fontSize: '15px',
+                  fontFamily: 'inherit',
+                  outline: 'none',
+                  transition: 'border-color 0.3s ease',
+                  minWidth: '160px'
+                }}
+                onFocus={(e) => e.target.style.borderColor = '#3b82f6'}
+                onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
+              />
+            </div>
+            
+            <button
+              onClick={handleGeneratePost}
+              disabled={isGenerating}
+              style={{
+                padding: '14px 28px',
+                background: isGenerating 
+                  ? 'linear-gradient(45deg, #6b7280, #4b5563)' 
+                  : 'linear-gradient(45deg, #10b981, #059669)',
+                color: 'white',
+                border: 'none',
+                borderRadius: '12px',
+                cursor: isGenerating ? 'not-allowed' : 'pointer',
+                fontSize: '16px',
+                fontWeight: '600',
+                opacity: isGenerating ? 0.7 : 1,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                boxShadow: isGenerating 
+                  ? '0 4px 12px rgba(107, 114, 128, 0.3)'
+                  : '0 8px 24px rgba(16, 185, 129, 0.4)',
+                transition: 'all 0.3s ease',
+                fontFamily: 'inherit',
+                marginTop: '20px'
+              }}
+            >
+              {isGenerating ? (
+                <>
+                  <div style={{
+                    width: '16px',
+                    height: '16px',
+                    border: '2px solid #ffffff',
+                    borderTop: '2px solid transparent',
+                    borderRadius: '50%',
+                    animation: 'spin 1s linear infinite'
+                  }}></div>
+                  Generating...
+                </>
+              ) : (
+                <>
+                  ✨ Generate Post
+                </>
+              )}
+            </button>
+          </div>
+          
+          <div style={{
+            marginTop: '15px',
+            textAlign: 'center',
+            fontSize: '13px',
+            color: '#6b7280'
+          }}>
+            Generate a LinkedIn post based on Sundai Hack projects from the selected date
+          </div>
+        </div>
       
       {isEditing ? (
         <div style={{
@@ -211,12 +351,12 @@ export default function Home() {
           </div>
         </div>
       ) : (
-        <PostPreview 
-          text={postData.text}
-          status={postData.status}
+      <PostPreview 
+        text={postData.text}
+        status={postData.status}
           onEdit={handleEditStart}
           canEdit={postData.status === 'pending'}
-        />
+      />
       )}
       
       {postData.status === 'pending' && !isEditing && (
@@ -283,9 +423,9 @@ export default function Home() {
       
       {postData.status !== 'pending' && (
         <div style={{ textAlign: 'center', marginTop: '30px' }}>
-          <button 
-            onClick={resetPost}
-            style={{
+        <button 
+          onClick={resetPost}
+          style={{
               padding: '16px 32px',
               background: 'linear-gradient(45deg, #3b82f6, #1d4ed8)',
               color: 'white',
