@@ -40,14 +40,26 @@ def get_projects_by_date(date_str, verbose=True):
     if verbose:
         print(f"Fetching projects created on {date_str}...")
     
-    # Create a connector instance
-    db = DBConnector(
-        host=os.getenv("DB_HOST") or "34.148.221.200",
-        database=os.getenv("DB_NAME") or "sundai_db",
-        user=os.getenv("DB_USER") or "readonly",
-        password=os.getenv("DB_PASS") or "readonly",
-        port=5432
-    )
+    # Determine which database to use
+    use_sqlite = os.getenv("USE_SQLITE", "false").lower() == "true"
+    
+    if use_sqlite:
+        if verbose:
+            print("Using SQLite database connection...")
+        db = DBConnector(
+            db_type='sqlite',
+            sqlite_path=os.getenv("SQLITE_PATH", "hackathon_projects.db")
+        )
+    else:
+        if verbose:
+            print("Using PostgreSQL database connection...")
+        db = DBConnector(
+            host=os.getenv("DB_HOST") or "34.148.221.200",
+            database=os.getenv("DB_NAME") or "sundai_db",
+            user=os.getenv("DB_USER") or "readonly",
+            password=os.getenv("DB_PASS") or "readonly",
+            port=5432
+        )
     
     # Connect to the database
     if not db.connect():
@@ -56,21 +68,47 @@ def get_projects_by_date(date_str, verbose=True):
         return None
     
     try:
-        # Find the Project table
+        # Find the appropriate table based on database type
         tables = db.list_tables()
-        if 'Project' not in tables:
+        
+        if getattr(db, 'db_type', 'postgresql') == 'sqlite':
+            target_table = 'HackathonProjects'
+        else:
+            target_table = 'Project'
+            
+        if target_table not in tables:
             if verbose:
-                print("Project table not found in the database.")
+                print(f"{target_table} table not found in the database.")
             return None
         
         # Query for projects created on the specified date
-        query = f"""
-        SELECT * 
-        FROM "Project" 
-        WHERE "createdAt" >= '{date_str} 00:00:00' 
-        AND "createdAt" < '{next_day_str} 00:00:00'
-        ORDER BY "createdAt"
-        """
+        if getattr(db, 'db_type', 'postgresql') == 'sqlite':
+            query = f"""
+            SELECT 
+                ProjectID as project_id, 
+                ProjectName as project_name, 
+                TeamName as team_name, 
+                TeamMembers as team_members,
+                Description as description, 
+                TechStack as tech_stack,
+                RepoUrl as repo_url, 
+                DemoUrl as demo_url, 
+                Track as track, 
+                Prize as prize,
+                HackathonName as hackathon_name, 
+                CompletedAt as createdAt
+            FROM HackathonProjects 
+            WHERE date(CompletedAt) = '{date_str}'
+            ORDER BY CompletedAt
+            """
+        else:
+            query = f"""
+            SELECT * 
+            FROM "Project" 
+            WHERE "createdAt" >= '{date_str} 00:00:00' 
+            AND "createdAt" < '{next_day_str} 00:00:00'
+            ORDER BY "createdAt"
+            """
         
         projects_df = db.query_to_dataframe(query)
         
@@ -79,12 +117,20 @@ def get_projects_by_date(date_str, verbose=True):
                 print(f"No projects found with creation date {date_str}.")
                 
                 # Get the date range of projects
-                date_range_query = """
-                SELECT 
-                    MIN("createdAt") as earliest_date,
-                    MAX("createdAt") as latest_date
-                FROM "Project"
-                """
+                if getattr(db, 'db_type', 'postgresql') == 'sqlite':
+                    date_range_query = """
+                    SELECT 
+                        MIN(CompletedAt) as earliest_date,
+                        MAX(CompletedAt) as latest_date
+                    FROM HackathonProjects
+                    """
+                else:
+                    date_range_query = """
+                    SELECT 
+                        MIN("createdAt") as earliest_date,
+                        MAX("createdAt") as latest_date
+                    FROM "Project"
+                    """
                 
                 date_range = db.execute_query(date_range_query)
                 
@@ -93,13 +139,22 @@ def get_projects_by_date(date_str, verbose=True):
                     print(f"Project creation dates range from {earliest} to {latest}")
                     
                     # Suggest some dates that have projects
-                    sample_dates_query = """
-                    SELECT DISTINCT DATE("createdAt") as creation_date, COUNT(*) as project_count
-                    FROM "Project"
-                    GROUP BY DATE("createdAt")
-                    ORDER BY project_count DESC
-                    LIMIT 5
-                    """
+                    if getattr(db, 'db_type', 'postgresql') == 'sqlite':
+                        sample_dates_query = """
+                        SELECT DISTINCT DATE(CompletedAt) as creation_date, COUNT(*) as project_count
+                        FROM HackathonProjects
+                        GROUP BY DATE(CompletedAt)
+                        ORDER BY project_count DESC
+                        LIMIT 5
+                        """
+                    else:
+                        sample_dates_query = """
+                        SELECT DISTINCT DATE("createdAt") as creation_date, COUNT(*) as project_count
+                        FROM "Project"
+                        GROUP BY DATE("createdAt")
+                        ORDER BY project_count DESC
+                        LIMIT 5
+                        """
                     
                     sample_dates = db.execute_query(sample_dates_query)
                     
