@@ -40,11 +40,32 @@ A tool for automatically generating and posting LinkedIn updates about recent pr
 
 ## Usage
 
+### Command Line Interface
+
 Run the main script to pull data, generate a post, and publish to LinkedIn:
 
 ```
 python main.py
 ```
+
+### Web Interface
+
+The project also includes a web interface for generating and posting LinkedIn updates:
+
+1. Start the Next.js development server:
+   ```
+   cd src
+   npm install
+   npm run dev
+   ```
+
+2. Open your browser and navigate to `http://localhost:3000`
+
+3. Use the web interface to:
+   - Select a date to generate posts for
+   - Preview the generated post
+   - Edit the post content if needed
+   - Approve and publish directly to LinkedIn
 
 ### Command-line Options
 
@@ -118,6 +139,7 @@ This will create a `hackathon_projects.db` file with sample project data.
 
 ## Components
 
+### Backend Components
 - `main.py`: Orchestrates the entire workflow
 - `src/data_pull.py`: Pulls project data from the database
 - `src/project_summary.py`: Generates LinkedIn posts using OpenAI
@@ -125,6 +147,13 @@ This will create a `hackathon_projects.db` file with sample project data.
 - `src/get_linkedin_token.py`: Helper for obtaining LinkedIn API tokens
 - `src/db_connector.py`: Database connection utilities
 - `src/utils.py`: Shared utility functions
+
+### Web Interface Components
+- `src/pages/index.js`: Main web interface page
+- `src/pages/api/generate-post.js`: API endpoint for generating posts
+- `src/pages/api/linkedin-post.js`: API endpoint for posting to LinkedIn
+- `src/components/PostPreview.js`: Component for previewing generated posts
+- `src/components/ApprovalButtons.js`: Component for approving/rejecting posts
 
 ## Output Files
 

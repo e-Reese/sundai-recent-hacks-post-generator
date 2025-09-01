@@ -100,6 +100,8 @@ export default function Home() {
 
   const handleGeneratePost = async () => {
     setIsGenerating(true);
+    setResult(null); // Clear previous results
+    
     try {
       const response = await fetch('/api/generate-post', {
         method: 'POST',
@@ -111,15 +113,29 @@ export default function Home() {
       
       const data = await response.json();
       
-      if (response.ok) {
+      if (response.ok && data.success) {
         setPostData({ text: data.generatedPost, status: 'pending' });
-        setResult({ success: true, message: 'Post generated successfully!' });
+        setResult({ 
+          success: true, 
+          message: 'Post generated successfully! Review and approve to publish to LinkedIn.' 
+        });
       } else {
-        setResult({ success: false, message: data.error || 'Failed to generate post' });
+        console.error('Error generating post:', data);
+        setResult({ 
+          success: false, 
+          message: data.error || 'Failed to generate post',
+          details: data.details || 'No additional details available'
+        });
       }
     } catch (error) {
-      setResult({ success: false, message: 'Failed to generate post' });
+      console.error('Network error:', error);
+      setResult({ 
+        success: false, 
+        message: 'Network error occurred while generating post',
+        details: error.message
+      });
     }
+    
     setIsGenerating(false);
   };
 
@@ -382,11 +398,31 @@ export default function Home() {
           textAlign: 'center',
           boxShadow: '0 6px 24px rgba(0, 0, 0, 0.1)'
         }}>
-          <div style={{ marginBottom: linkedinPostUrl ? '12px' : '0' }}>
+          <div style={{ marginBottom: (linkedinPostUrl || result.details) ? '12px' : '0' }}>
             {result.success ? '🎉 ' : '⚠️ '}{result.message}
           </div>
+          
+          {/* Error details (only shown if there's an error with details) */}
+          {!result.success && result.details && (
+            <div style={{
+              marginTop: '10px',
+              padding: '10px',
+              backgroundColor: 'rgba(0, 0, 0, 0.1)',
+              borderRadius: '8px',
+              fontSize: '0.85rem',
+              textAlign: 'left',
+              whiteSpace: 'pre-wrap',
+              maxHeight: '200px',
+              overflowY: 'auto'
+            }}>
+              <strong>Details:</strong><br/>
+              {result.details}
+            </div>
+          )}
+          
+          {/* LinkedIn post link (only shown if successful) */}
           {linkedinPostUrl && result.success && (
-            <div>
+            <div style={{ marginTop: '15px' }}>
               <a
                 href={linkedinPostUrl}
                 target="_blank"
